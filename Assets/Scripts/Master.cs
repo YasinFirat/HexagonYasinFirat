@@ -5,10 +5,23 @@ using UnityEngine;
 /// <summary>
 /// This script was created to be accessed from everywhere
 /// </summary>
-public abstract class PoolMaster : MonoBehaviour
+public abstract class Master : MonoBehaviour
 {
     private PoolManager _poolManager;
+    private GameManager _gameManager;
 
+
+    public GameManager gameManager
+    {
+        get
+        {
+            if (_gameManager == null)
+            {
+                _gameManager = FindObjectOfType<GameManager>();
+            }
+            return _gameManager;
+        }
+    }
 
     public PoolManager poolManager
     {

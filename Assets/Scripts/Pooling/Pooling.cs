@@ -13,29 +13,23 @@ public class Pooling
     public PoolNames POOLNAMES;
     public GameObject prefab;
     public Transform parent;
-    public int row;
-    public int column;
-    public float distanceOfHexagon=.1f;
-    public int totalMember
-    {
-        get
-        {
-            return row * column;
-        }
-    }
+    public int totalMember;
     Queue<GameObject> pool = new Queue<GameObject>();
 
     /// <summary>
     /// Objects are filled into the Pool and the PoolMember script is added to become a member of the Pool.
     /// </summary>    
-    public void FillPool()
+    public void FillPool(int row,int column)
     {
+        totalMember = row * column;
         for (int i = 0; i < totalMember; i++)
         {
+            
             GameObject newObject = Object.Instantiate(prefab, parent);
             newObject.SetActive(false);
             newObject.AddComponent<PoolMember>().POOLNAMES = POOLNAMES;
             pool.Enqueue(newObject);
+            
         }
     }
 
@@ -44,7 +38,7 @@ public class Pooling
     /// </summary>
     /// <param name="_position">object's location</param>
     /// <returns></returns>
-    public GameObject PullFromPool(Vector3 _position)
+    public GameObject PullFromPool(Vector3 _position,bool active=true)
     {
         if (pool.Count == 0)
         {
@@ -52,8 +46,9 @@ public class Pooling
             return null;
         }
         GameObject call = pool.Dequeue();
+        call.SetActive(active);
         call.transform.localPosition = _position;
-        call.SetActive(true);
+      
         return call;
     }
     /// <summary>

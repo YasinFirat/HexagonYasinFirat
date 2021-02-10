@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// Build pools here
 /// </summary>
-public class PoolManager : MonoBehaviour
+public class PoolManager :Master
 {
     public Pooling[] poolings;
     
@@ -11,7 +11,7 @@ public class PoolManager : MonoBehaviour
     {
         for (int i = 0; i < poolings.Length; i++)
         {
-            poolings[i].FillPool();
+            poolings[i].FillPool(gameManager.row,gameManager.column);
         }
     }
 
@@ -40,14 +40,14 @@ public class PoolManager : MonoBehaviour
     /// <param name="POOLNAMES">The enum tag of the Pool of which it is a member</param>
     /// <param name="_position"> </param>
     /// <returns></returns>
-    public GameObject PullFromPool(PoolNames POOLNAMES, Vector3 _position)
+    public GameObject PullFromPool(PoolNames POOLNAMES, Vector3 _position, bool active = true)
     {
        
         for (int i = 0; i < poolings.Length; i++)
         {
             if (poolings[i].POOLNAMES == POOLNAMES)
             {
-                return poolings[(int)POOLNAMES].PullFromPool(_position);
+                return poolings[(int)POOLNAMES].PullFromPool(_position, active);
                 
             }
         }
@@ -55,50 +55,7 @@ public class PoolManager : MonoBehaviour
 
     }
 
-    public int GetRow(PoolNames POOLNAMES)
-    {
-        for (int i = 0; i < poolings.Length; i++)
-        {
-            if (poolings[i].POOLNAMES == POOLNAMES)
-            {
-                return poolings[(int)POOLNAMES].row;
-            }
-        }
-        return 0;
-    }
-    public int GetColumn(PoolNames POOLNAMES)
-    {
-        for (int i = 0; i < poolings.Length; i++)
-        {
-            if (poolings[i].POOLNAMES == POOLNAMES)
-            {
-                return poolings[(int)POOLNAMES].column;
-            }
-        }
-        return 0;
-    }
-    public float GetDistanceOfRow(PoolNames POOLNAMES)
-    {
-        for (int i = 0; i < poolings.Length; i++)
-        {
-            if (poolings[i].POOLNAMES == POOLNAMES)
-            {
-                return poolings[(int)POOLNAMES].distanceOfHexagon+HexagonInfo.DISTANCEOFROW;
-            }
-        }
-        return 0;
-    }
-    public float GetDistanceOfColumn(PoolNames POOLNAMES)
-    {
-        for (int i = 0; i < poolings.Length; i++)
-        {
-            if (poolings[i].POOLNAMES == POOLNAMES)
-            {
-                return poolings[(int)POOLNAMES].distanceOfHexagon + HexagonInfo.DISTANCEOFCOLUMN;
-            }
-        }
-        return 0;
-    }
+   
 
 
 }
