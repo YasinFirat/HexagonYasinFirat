@@ -5,6 +5,17 @@ using UnityEngine;
 public class HexagonStatus : Hexagon
 {
     bool firstRun;
+    public HexagonColor hexagonColor;
+    SpriteRenderer spriteRenderer;
+
+    private void Awake()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+    public void DisableYourself()
+    {
+        gameManager.creativePoint[column].RemoveMember(row);
+    }
 
     public void OnEnable()
     {
@@ -13,10 +24,16 @@ public class HexagonStatus : Hexagon
             firstRun = !firstRun;
             return;
         }
-      
+        transform.localPosition = gameManager.creativePoint[column].startPosition;
+
+        SetColor(gameManager.GetRandomColor).SetNestPosition();
         Move();
-
-
+    }
+    public HexagonStatus SetColor(HexagonColor _hexagonColor)
+    {
+        hexagonColor = _hexagonColor;
+        spriteRenderer.color = hexagonColor.color32;
+        return this;
     }
     public override Hexagon DoThisWhenFirstStart()
     {
@@ -36,8 +53,7 @@ public class HexagonStatus : Hexagon
    
     public void Move()
     {
-        transform.localPosition = gameManager.creativePoint[column].startPosition;
-        SetNestPosition();
+      
         StartCoroutine(MoveEnumerator());
     }
     /// <summary>

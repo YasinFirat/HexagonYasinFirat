@@ -10,6 +10,11 @@ public class CreativePoint:Master
     public Vector2 startPosition;
     public List<HexagonStatus> hexagonStatuses;
 
+
+    public int GetColorKey(int index)
+    {
+        return hexagonStatuses[index].hexagonColor.GetKey();
+    }
     public CreativePoint(int _column, int _row, float positionX)
     {
         //Her Create noktasının bir başlangıç konumu vardır.
@@ -37,12 +42,15 @@ public class CreativePoint:Master
         if (hexagonStatuses.Count == maxRow)
             return;
         //maxRow eksik çıkınca maxRow'a ulaşıncaya kadar havuz'dan bir obje istedik.
+        //AddMember(poolManager.PullFromPool(PoolNames.hexagon, startPosition)
+        //       .GetComponent<HexagonStatus>());
         while (hexagonStatuses.Count != maxRow)
         {
             AddMember(poolManager.PullFromPool(PoolNames.hexagon, startPosition)
                 .GetComponent<HexagonStatus>());
         }
         SetAllInformation().MoveAll();
+        Debug.Log("checkedildi");
     }
     /// <summary>
     /// Obje önce havuza gönderilir ardından listeden silinir.

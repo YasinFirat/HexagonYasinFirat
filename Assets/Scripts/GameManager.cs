@@ -11,24 +11,45 @@ public class GameManager : MonoBehaviour
     public int column;
     public float distanceOfHexagon = .1f;
     public List<CreativePoint> creativePoint;
+    [Header("Colors")]
+    public List<HexagonColor> hexagonColors;
+
 
     /// <summary>
     /// Oyun Başladığında çalışır.
     /// </summary>
     public void StartGame()
     {
+        //key eklendi.karşılaştırma Getkey() ile yapılacak.
+        for (int i = 0; i < hexagonColors.Count; i++)
+        {
+            hexagonColors[i].SetKey(i);
+        }
         StartCoroutine(StartThisGame());
     }
     public void RandomDestroy()
     {
         creativePoint[Random.Range(0, column)]
             .RemoveMember(Random.Range(0, row));
-        
 
+        CheckAllPositions();
+
+
+    }
+    public void CheckAllPositions()
+    {
         for (int i = 0; i < creativePoint.Count; i++)
         {
             creativePoint[i].CheckPositions();
         }
+    }
+    public HexagonColor GetRandomColor
+    {
+        get
+        {
+            return hexagonColors[Random.Range(0, hexagonColors.Count)];
+        }
+       
     }
     /// <summary>
     /// Oyun başında objelerin düşme animasyonu için sıralamayı belirler.
