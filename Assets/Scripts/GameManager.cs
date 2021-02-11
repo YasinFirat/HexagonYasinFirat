@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviour
     public float distanceOfHexagon = .1f;
     public List<CreativePoint> creativePoint;
 
+    /// <summary>
+    /// Oyun Başladığında çalışır.
+    /// </summary>
     public void StartGame()
     {
         StartCoroutine(StartThisGame());
@@ -27,7 +30,10 @@ public class GameManager : MonoBehaviour
             creativePoint[i].CheckPositions();
         }
     }
-    
+    /// <summary>
+    /// Oyun başında objelerin düşme animasyonu için sıralamayı belirler.
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator StartThisGame()
     {
         int i = 0;
@@ -63,8 +69,15 @@ public class GameManager : MonoBehaviour
     {
         return distanceOfHexagon + DISTANCEOFCOLUMN;
     }
-    public Vector2 DeterminePositionOfHexagon(int _row,int _column,float restorePosition=0)
+    /// <summary>
+    /// Hexagon'un konum işlemlerini yapar
+    /// </summary>
+    /// <param name="_row"></param>
+    /// <param name="_column"></param>
+    /// <returns></returns>
+    public Vector2 DeterminePositionOfHexagon(int _row,int _column)
     {
-        return new Vector2(_column * GetDistanceOfColumn(), _row * GetDistanceOfRow() + restorePosition);
+        float restore= _column % 2 == 1 ? (-GetDistanceOfRow() / 2) : 0;
+        return new Vector2(_column * GetDistanceOfColumn(), _row * GetDistanceOfRow() + restore);
     }
 }

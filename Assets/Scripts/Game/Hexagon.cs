@@ -6,6 +6,10 @@ public abstract class Hexagon :Master
     public int row;
     public int column;
 
+    /// <summary>
+    /// Constructor ile sorun yaşamam durumunda bu metodu kullanacağım
+    /// </summary>
+    /// <returns></returns>
     public abstract Hexagon DoThisWhenFirstStart();
     
     public Hexagon SetRow(int _row)
@@ -18,7 +22,7 @@ public abstract class Hexagon :Master
         this.column = _column;
         return this;
     }
-    public abstract Hexagon SetNestPosition(Vector2 _nestPosition);
+    public abstract Hexagon SetNestPosition();
     public int GetRow()
     {
         return row;

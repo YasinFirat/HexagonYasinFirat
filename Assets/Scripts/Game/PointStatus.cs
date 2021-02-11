@@ -12,7 +12,7 @@ public class PointStatus : Hexagon
         return this;
     }
 
-    public override Hexagon SetNestPosition(Vector2 _nestPosition)
+    public override Hexagon SetNestPosition()
     {
         #if UNITY_EDITOR
         Debug.LogWarning("Ana yuva'nın pozisyonunu değiştirmek istediğinize emin misin ? Eğer " +
