@@ -50,7 +50,6 @@ public class CreativePoint:Master
                 .GetComponent<HexagonStatus>());
         }
         SetAllInformation().MoveAll();
-        Debug.Log("checkedildi");
     }
     /// <summary>
     /// Obje önce havuza gönderilir ardından listeden silinir.
@@ -59,7 +58,25 @@ public class CreativePoint:Master
     public void RemoveMember(int i)
     {
         hexagonStatuses[i].GetComponent<PoolMember>().GoBackToPool();
-        hexagonStatuses.RemoveAt(i);
+      //  hexagonStatuses.RemoveAt(i);
+    }
+    /// <summary>
+    /// Eğer hücre'deki obje active değilse remove edilir.
+    /// </summary>
+    public void ActiveControl()
+    {
+        for (int i = 0; i < hexagonStatuses.Count; i++)
+        {
+            Debug.Log("Active mi?" + hexagonStatuses[i].gameManager.isActiveAndEnabled);
+            if (!hexagonStatuses[i].gameObject.activeInHierarchy)
+            {
+                Debug.Log("Active Degil" + i);
+                hexagonStatuses.RemoveAt(i);
+                i--;
+            }
+
+        }
+       
     }
     /// <summary>
     /// Tüm objelerine gerekli row ve column değerlerini verir.

@@ -2,6 +2,7 @@ using UnityEngine;
 
 public abstract class Hexagon :Master
 {
+    public PoolMember poolMember;
     public Vector2 nestPosition;
     public int row;
     public int column;

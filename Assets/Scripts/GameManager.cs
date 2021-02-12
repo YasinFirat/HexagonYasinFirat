@@ -13,7 +13,9 @@ public class GameManager : MonoBehaviour
     public List<CreativePoint> creativePoint;
     [Header("Colors")]
     public List<HexagonColor> hexagonColors;
+    public ExplodeHexagon explodeHexagon;
 
+    
 
     /// <summary>
     /// Oyun Başladığında çalışır.
@@ -26,18 +28,48 @@ public class GameManager : MonoBehaviour
             hexagonColors[i].SetKey(i);
         }
         StartCoroutine(StartThisGame());
+        explodeHexagon = new ExplodeHexagon(this);
     }
-    public void RandomDestroy()
+    public bool EqualColumn(int _column)
     {
-        creativePoint[Random.Range(0, column)]
-            .RemoveMember(Random.Range(0, row));
-
-        CheckAllPositions();
-
-
+        if (_column >= 0 && _column < column)
+        {
+            return true;
+        }
+        return false;
     }
-    public void CheckAllPositions()
+    public bool EqualRow(int _row)
     {
+        if (_row >= 0 && _row < row)
+        {
+            return true;
+        }
+        return false;
+    }
+    /// <summary>
+    /// Patlatılacak noktaların listesi verilmeli
+    /// </summary>
+    /// <param name="explodes"></param>
+    public void Explode()
+    {
+        List<Vector2Int> explodes = explodeHexagon.CheckExplode();
+        for (int i = 0; i < explodes.Count; i++)
+        {
+            creativePoint[explodes[i].x].RemoveMember(explodes[i].y);
+            
+        }
+        CheckAllPoints();
+       
+    }
+    /// <summary>
+    /// Patlama'dan sonra kullanılması önerilir. Patlayan obje'lerin yerine yeni objeleri yerleştirerek hareket ettirir.
+    /// </summary>
+    public void CheckAllPoints()
+    {
+        for (int i = 0; i < creativePoint.Count; i++)
+        {
+            creativePoint[i].ActiveControl();
+        }
         for (int i = 0; i < creativePoint.Count; i++)
         {
             creativePoint[i].CheckPositions();

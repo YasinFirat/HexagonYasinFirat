@@ -12,10 +12,7 @@ public class HexagonStatus : Hexagon
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
-    public void DisableYourself()
-    {
-        gameManager.creativePoint[column].RemoveMember(row);
-    }
+
 
     public void OnEnable()
     {
