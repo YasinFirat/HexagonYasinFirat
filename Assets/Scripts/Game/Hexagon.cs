@@ -1,11 +1,14 @@
+using System.Collections.Generic;
 using UnityEngine;
+
 
 public abstract class Hexagon :Master
 {
-    public PoolMember poolMember;
-    public Vector2 nestPosition;
-    public int row;
-    public int column;
+
+    [HideInInspector] public PoolMember poolMember;
+     public Vector2 nestPosition;
+     public int row;
+     public int column;
 
     /// <summary>
     /// Constructor ile sorun yaşamam durumunda bu metodu kullanacağım
@@ -36,4 +39,6 @@ public abstract class Hexagon :Master
     {
         return nestPosition;
     }
+
+  
 }

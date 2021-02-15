@@ -27,6 +27,7 @@ public class Pooling
             
             GameObject newObject = Object.Instantiate(prefab, parent);
             newObject.SetActive(false);
+            newObject.name = prefab.name + i;
             newObject.AddComponent<PoolMember>().POOLNAMES = POOLNAMES;
             pool.Enqueue(newObject);
             

@@ -21,7 +21,7 @@ public class CreateHexagon : Master
         for (int i = 0; i < column; i++)
         {
             gameManager.creativePoint.Add(new
-                CreativePoint(i,gameManager.row,i*gameManager.GetDistanceOfColumn()));
+                CreativePoint(i,gameManager.row,i*gameManager.GetDistanceOfColumn(),poolManager));
             
             for (int j = 0; j < row; j++)
             {

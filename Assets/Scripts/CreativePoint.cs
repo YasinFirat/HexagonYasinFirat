@@ -3,23 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class CreativePoint:Master
+public class CreativePoint
 {
+    int arriveCounter;
     public int maxRow;
     public int column;
     public Vector2 startPosition;
     public List<HexagonStatus> hexagonStatuses;
+    public PoolManager poolManager;
 
 
     public int GetColorKey(int index)
     {
         return hexagonStatuses[index].hexagonColor.GetKey();
     }
-    public CreativePoint(int _column, int _row, float positionX)
+    public CreativePoint(int _column, int _row, float positionX,PoolManager _poolManager)
     {
         //Her Create noktasının bir başlangıç konumu vardır.
         startPosition = new Vector2(positionX, (Camera.main.orthographicSize + 1) * 2);
-
+        poolManager=_poolManager;
         hexagonStatuses = new List<HexagonStatus>();
         column = _column;
         maxRow = _row;
@@ -34,6 +36,7 @@ public class CreativePoint:Master
         hexagonStatuses.Add(hexagonStatus);
         
     }
+     
     /// <summary>
     /// Patlamadan sonra yeni yerleşim yeri belirlenir.
     /// </summary>
@@ -58,7 +61,6 @@ public class CreativePoint:Master
     public void RemoveMember(int i)
     {
         hexagonStatuses[i].GetComponent<PoolMember>().GoBackToPool();
-      //  hexagonStatuses.RemoveAt(i);
     }
     /// <summary>
     /// Eğer hücre'deki obje active değilse remove edilir.
@@ -67,10 +69,8 @@ public class CreativePoint:Master
     {
         for (int i = 0; i < hexagonStatuses.Count; i++)
         {
-            Debug.Log("Active mi?" + hexagonStatuses[i].gameManager.isActiveAndEnabled);
             if (!hexagonStatuses[i].gameObject.activeInHierarchy)
             {
-                Debug.Log("Active Degil" + i);
                 hexagonStatuses.RemoveAt(i);
                 i--;
             }
@@ -86,7 +86,7 @@ public class CreativePoint:Master
     {
         for (int i = 0; i < hexagonStatuses.Count; i++)
         {
-            hexagonStatuses[i].SetRow(i).SetColumn(column);
+            hexagonStatuses[i].SetRow(i).SetColumn(column).SetNestPosition();
         }
         return this;
     }
@@ -94,13 +94,29 @@ public class CreativePoint:Master
     /// Tüm objelerini hareket ettirir.
     /// </summary>
     /// <returns></returns>
-    CreativePoint MoveAll()
+    public CreativePoint MoveAll()
     {
         for (int row = 0; row < hexagonStatuses.Count; row++)
         {
             hexagonStatuses[row].SetNestPosition();
-            hexagonStatuses[row].Move();
+            hexagonStatuses[row].Start_Move();
         }
         return this;
+    }
+
+    public bool IsArrivedAllMembers()
+    { arriveCounter = 0;
+       
+        for (int i = 0; i < hexagonStatuses.Count; i++)
+        {
+            arriveCounter += hexagonStatuses[i].isArrived ? 1:0;
+        }
+
+        return arriveCounter == maxRow;
+    }
+
+    public void SetColumnAndRowMember(int index)
+    {
+        hexagonStatuses[index].SetColumn(column).SetRow(index).SetNestPosition();
     }
 }

@@ -10,6 +10,7 @@ public class ExplodeHexagon
 {
     public GameManager gameManager;
     public List<Vector2Int> restore;
+    public bool isContinueExplode=true;
     bool[] checks;
 
     public ExplodeHexagon(GameManager _gameManager)
@@ -19,6 +20,7 @@ public class ExplodeHexagon
     //list olacak restore döndürecek.
     public List<Vector2Int> CheckExplode()
     {
+       
         restore = new List<Vector2Int>();
         //Sırayla aşağıdan yukarıya tüm noktalar kontrol edilir.
         for (int x = 0; x < gameManager.column; x++)
@@ -94,7 +96,6 @@ public class ExplodeHexagon
         _explodes.Add(_points[0]);
         for (int i = 0; i < _explodes.Count && _explodes.Count > 1; i++)
         {
-            // g.Add(gameManager.creativePoint[explodes[i].x].hexagonStatuses[explodes[i].y].gameObject.GetComponent<HexagonStatus>());
             //eğer verilen index ile alakalı point yoksa ekle
             if (!_restore.Contains(_explodes[i]))
             {
