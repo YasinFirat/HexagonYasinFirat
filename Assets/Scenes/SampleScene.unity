@@ -309,7 +309,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1358802777141109673, guid: 491bcdf56581f0941b4568713bbfe890, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1358802777141109674, guid: 491bcdf56581f0941b4568713bbfe890, type: 3}
       propertyPath: m_Name
@@ -317,8 +317,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1358802777141109674, guid: 491bcdf56581f0941b4568713bbfe890, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1358802777141109678, guid: 491bcdf56581f0941b4568713bbfe890, type: 3}
+      propertyPath: m_Radius
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1358802777141109679, guid: 491bcdf56581f0941b4568713bbfe890, type: 3}
+      propertyPath: rb2D
+      value: 
+      objectReference: {fileID: 1555757344}
     - target: {fileID: 1358802777141109679, guid: 491bcdf56581f0941b4568713bbfe890, type: 3}
       propertyPath: range
       value: 0.3
@@ -331,6 +339,10 @@ PrefabInstance:
       propertyPath: isReadyForTurn
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1358802777141109679, guid: 491bcdf56581f0941b4568713bbfe890, type: 3}
+      propertyPath: spriteRenderer
+      value: 
+      objectReference: {fileID: 1555757347}
     - target: {fileID: 1358802777141109679, guid: 491bcdf56581f0941b4568713bbfe890, type: 3}
       propertyPath: layerMask.m_Bits
       value: 4
@@ -570,7 +582,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bd5c7fe0e7f5a942b9b1831438fea21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nest: 1
   hexagon: 0
 --- !u!4 &1234353019
 Transform:
@@ -641,12 +652,37 @@ PrefabInstance:
       propertyPath: circle
       value: 
       objectReference: {fileID: 869247935}
+    - target: {fileID: 5441451196309099234, guid: e357ea15260c93a429c8dee1ddc51cfd, type: 3}
+      propertyPath: circleObject
+      value: 
+      objectReference: {fileID: 1555757345}
     - target: {fileID: 5441451196309099245, guid: e357ea15260c93a429c8dee1ddc51cfd, type: 3}
       propertyPath: m_Name
       value: TouchScreen
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e357ea15260c93a429c8dee1ddc51cfd, type: 3}
+--- !u!50 &1555757344 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 1358802777141109677, guid: 491bcdf56581f0941b4568713bbfe890, type: 3}
+  m_PrefabInstance: {fileID: 297882353}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1555757345 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1358802777141109679, guid: 491bcdf56581f0941b4568713bbfe890, type: 3}
+  m_PrefabInstance: {fileID: 297882353}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88b663ba081e37c42b402c7336fe39d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!212 &1555757347 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 1358802777141109673, guid: 491bcdf56581f0941b4568713bbfe890, type: 3}
+  m_PrefabInstance: {fileID: 297882353}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1789845723
 GameObject:
   m_ObjectHideFlags: 0

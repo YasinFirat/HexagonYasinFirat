@@ -213,7 +213,7 @@ public class GameManager : MonoBehaviour
         return hexagonStatuses;
     }
 
-    public void ChangePonts(List<Vector2Int> hexagonStatuses)
+    public void ReadyForTurnLeft(List<Vector2Int> hexagonStatuses)
     {
         List<HexagonStatus> hex = new List<HexagonStatus>();
         for (int i = 0; i < hexagonStatuses.Count; i++)

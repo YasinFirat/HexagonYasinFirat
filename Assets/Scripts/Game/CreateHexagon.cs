@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CreateHexagon : Master
 {
-    public PoolNames nest;
     public PoolNames hexagon;
    
     private void Start()
@@ -12,7 +11,7 @@ public class CreateHexagon : Master
         Create();
     }
     /// <summary>
-    /// Tüm nest'ler belirlenir ve createPoint belirlenir.
+    /// Tüm hexagon'ları oluşturur ve başlangıç için creativePoint dizisine ekler.
     /// </summary>
     public void Create()
     {
@@ -25,10 +24,6 @@ public class CreateHexagon : Master
             
             for (int j = 0; j < row; j++)
             {
-                poolManager.PullFromPool(nest, gameManager.DeterminePositionOfHexagon(j, i))
-                    .GetComponent<Hexagon>()
-                    .SetRow(i)
-                    .SetColumn(j).DoThisWhenFirstStart();
                 gameManager.creativePoint[i].AddMember(poolManager.PullFromPool(hexagon,Vector3.zero,false)
                     .GetComponent<HexagonStatus>());
             }

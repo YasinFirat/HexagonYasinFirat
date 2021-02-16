@@ -130,7 +130,7 @@ public class HexagonStatus : Hexagon
     {
 
         isArrived = false;
-        float speed = 3;
+        float speed = 5;
         if (!firstMove)
         {
             yield return new WaitForSeconds((column + row + Random.Range(0, 1f)) / 8);

@@ -13,14 +13,30 @@ public class Dedector : MonoBehaviour
 
     public void OnEnable()
     {
+#if UNITY_EDITOR
+        Debug.Log("<color=red> DEDECTOR AKTİF OLDU</color>");
+#endif
+#if UNITY_EDITOR
+        Debug.Log("selectedObject listesi tekrardan oluşturulacak. Şimdilik boyutu : " + selectedObject.Count);
+#endif
+
         selectedObject = new List<Vector2Int>();
+#if UNITY_EDITOR
+        Debug.Log("selectedObject listesi tekrardan oluşturuldu... Boyutu : " + selectedObject.Count);
+#endif
         StartCoroutine(SelectHexagon(.3f));
     }
     public IEnumerator SelectHexagon(float delay)
     {
+#if UNITY_EDITOR
+        Debug.Log("SelectHexagon metodu çağrıldı ve seçili hexagonların tespiti için");
+#endif
         yield return new WaitForSeconds(delay);
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, range, layerMask);
-        Debug.Log("5) Dedector"+ colliders.Length);
+#if UNITY_EDITOR
+        Debug.Log(colliders.Length+" sayısı defa hexagon bulundu aynı hexagonları yok etmek için döngüye giriyoruz.");
+#endif
+       
         Vector2Int keep;
         for (int i = 0; i < colliders.Length; i++)
         {
@@ -36,11 +52,18 @@ public class Dedector : MonoBehaviour
             }
            
         }
-        Debug.Log("7) isReadyForTurn aktif oldu");
+#if UNITY_EDITOR
+        Debug.Log("Döngüden çıktık yeni selectedObject listesi  boyutu : " + selectedObject.Count);
+#endif
         if (selectedObject.Count == 3)
         {
-            CancelInvoke();
+#if UNITY_EDITOR
+            Debug.Log("isReadyForTurn aktif edildi");
+#endif
             isReadyForTurn = true;
+#if UNITY_EDITOR
+            Debug.Log("Dedector kapatıldı.");
+#endif
             gameObject.SetActive(false);
         }
            
