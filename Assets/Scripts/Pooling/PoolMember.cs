@@ -16,11 +16,4 @@ public class PoolMember: Master
     {
         poolManager.BackToPool(POOLNAMES, this.gameObject);
     }
-    private void OnDisable()
-    {
-        //Don't worry, this method is here :)
-       // GoBackToPool();
-    }
-
-
 }

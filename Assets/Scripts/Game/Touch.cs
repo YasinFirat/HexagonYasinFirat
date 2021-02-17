@@ -10,7 +10,7 @@ public class Touch : Master
 
     void Start()
     {
-        circleObject = circle.gameObject.GetComponent<CircleObject>();
+        //circleObject = circle.gameObject.GetComponent<CircleObject>();
         gameManager.StartGame();
     }
 

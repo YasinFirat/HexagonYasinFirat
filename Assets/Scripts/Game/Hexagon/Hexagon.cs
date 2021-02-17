@@ -4,11 +4,14 @@ using UnityEngine;
 
 public abstract class Hexagon :Master
 {
-
-    [HideInInspector] public PoolMember poolMember;
-     public Vector2 nestPosition;
-     public int row;
-     public int column;
+    [HideInInspector]public PoolMember poolMember;
+    [HideInInspector]public Vector2 nestPosition;
+    [HideInInspector]public int row;
+    [HideInInspector]public int column;
+    [HideInInspector]public bool isArrived;
+    [HideInInspector]public HexagonColor hexagonColor;
+    public PointsOfHexagon pointsOfHexagon;
+    public SpriteRenderer spriteRenderer;
 
     /// <summary>
     /// Constructor ile sorun yaşamam durumunda bu metodu kullanacağım
@@ -39,6 +42,11 @@ public abstract class Hexagon :Master
     {
         return nestPosition;
     }
+    
+    public Vector2 DeterminePositionOfHexagon(int _row, int _column)
+    {
+        float restore = _column % 2 == 1 ? (-gameManager.GetDistanceOfRow() / 2) : 0;
+        return new Vector2(_column * gameManager.GetDistanceOfColumn(), _row * gameManager.GetDistanceOfRow() + restore);
+    }
 
-  
 }

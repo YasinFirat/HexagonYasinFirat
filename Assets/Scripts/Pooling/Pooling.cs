@@ -24,7 +24,6 @@ public class Pooling
         totalMember = row * column;
         for (int i = 0; i < totalMember; i++)
         {
-            
             GameObject newObject = Object.Instantiate(prefab, parent);
             newObject.SetActive(false);
             newObject.name = prefab.name + i;

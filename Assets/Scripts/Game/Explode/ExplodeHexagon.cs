@@ -6,6 +6,7 @@ using UnityEngine;
 /// Burada patlanacak objeleri bulan algoritma geliştirildi.
 /// (Oyun tamamlandıktan sonra optimize edilecek ve OOP'ye uygun hale getirilecek.)
 /// </summary>
+
 public class ExplodeHexagon
 {
     public GameManager gameManager;
@@ -17,7 +18,10 @@ public class ExplodeHexagon
     {
         gameManager = _gameManager;
     }
-    //list olacak restore döndürecek.
+    /// <summary>
+    /// Patlatılacak objeleri getirir.
+    /// </summary>
+    /// <returns></returns>
     public List<Vector2Int> CheckExplode()
     {
        
@@ -34,15 +38,15 @@ public class ExplodeHexagon
     }
     
     /// <summary>
-    /// Karşılaştırma işlemleri burada yapılır ve gereken şartları sağlıyorsa
+    /// Renklerin Karşılaştırma işlemleri burada yapılır ve gereken şartları sağlıyorsa
     /// bir sonraki aşamaya geçilir.
     /// </summary>
     /// <param name="_points">Kontrol edilecek noktalar</param>
-    /// <param name="_checks">_points indexi şartları sağlıyorsa _checks index'ine true değerini yazdırır.</param>
+    /// <param name="_checks">_points ile aynı boyutu taşıyan bir liste olmalı.</param>
     private void EqualsColors(Vector2Int[] _points,bool[] _checks)
     {
         checks[0] = true;
-        int checkCounter = 0; //true sayısı 2 veya 2'den fazlaysa patlama olabilir
+        int checkCounter = 0; //true sayısı 2 veya 2'den fazlaysa patlama olabilir.(0. index haricinde )
         int checkOddIndex = 0; // 1 ve 3. indexler false değeri ise hiçbir şekilde patlama olmaz. T T F T F T
         for (int i = 1; i < _points.Length; i++)
         {
@@ -76,7 +80,7 @@ public class ExplodeHexagon
        
     }
     /// <summary>
-    /// Patlama için hazır uygun olan noktaları bir listede toplar
+    /// Patlama için hazır uygun olan noktaları bir listede toplar ve daha önceden eklenen noktayı tekrar eklemez.
     /// </summary>
     /// <param name="_points">kontrol edilen noktalar</param>
     /// <param name="_explodes">patlama için hazır olan noktalar.(bu liste boş olarak tanımlanmalı)</param>
@@ -103,10 +107,15 @@ public class ExplodeHexagon
             }
         }
     }
-
+    /// <summary>
+    /// Patlatılacak objeleri belirleme adımları gerçekleştirilir.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
     public void ExplodeStep(int x,int y)
     {
         List<Vector2Int> explodes = new List<Vector2Int>();
+        //alt,üst ve sağ bölgede kalan hexagon'ların creativePoint dizisideki yerlerini belirler.
         Vector2Int[] points= { 
             new Vector2Int(x,y),
             new Vector2Int(x,y-1),
@@ -114,6 +123,8 @@ public class ExplodeHexagon
             new Vector2Int(x+1,y+1-x%2),
             new Vector2Int(x,y+1)
         };
+        //aynı renkte çıkan bölgeleri true veya false olarak listeler.Buradan edindiğimiz bilgilerle
+        //patlama olup olmayacağını belirleyeceğiz. örn;(T,T,F,T,F )
         checks = new bool[points.Length];
         
         EqualsColors(points,checks);

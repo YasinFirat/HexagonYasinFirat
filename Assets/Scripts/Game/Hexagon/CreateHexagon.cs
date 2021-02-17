@@ -5,7 +5,6 @@ using UnityEngine;
 public class CreateHexagon : Master
 {
     public PoolNames hexagon;
-   
     private void Start()
     {
         Create();
