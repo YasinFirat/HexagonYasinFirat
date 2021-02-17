@@ -42,8 +42,8 @@ public class Dedector : MonoBehaviour
         {
             if (colliders[i].transform.parent.CompareTag("Hexagon"))
             {
-                keep = new Vector2Int(colliders[i].transform.parent.GetComponent<HexagonStatus>().column,
-                        colliders[i].transform.parent.GetComponent<HexagonStatus>().row);
+                keep = new Vector2Int(colliders[i].transform.parent.GetComponent<Hexagon>().column,
+                        colliders[i].transform.parent.GetComponent<Hexagon>().row);
                 if (!selectedObject.Contains(keep))
                 {
                     selectedObject.Add(keep);

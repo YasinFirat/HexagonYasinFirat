@@ -49,7 +49,7 @@ public class TurnArround : Master
     {
         //liste normalde döndürme işlemi yapılacakları VectorInt olarak tuttuğundan dolayı
         //bunlara karşılık gelen bir hex listesi oluşturuyoruz.
-        List<HexagonStatus> hex = new List<HexagonStatus>();
+        List<Hexagon> hex = new List<Hexagon>();
         //sayı değerlerine karşılık gelen hexagon'ları listeye ekliyoruz.
         for (int i = 0; i < hexagonStatuses.Count; i++)
         {

@@ -1,28 +1,48 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// Nesneleri row olarak dizilmesini ve kontrol edilmesini sağlar.
+/// </summary>
 [System.Serializable]
 public class CreativePoint
 {
-    int arriveCounter;
+    private int arriveCounter;
+    /// <summary>
+    /// Bu sınıfta en fazla ne kadar row tanımlayacağımızın sınırını belirler.
+    /// </summary>
     public int maxRow;
-    public int column;
+    /// <summary>
+    /// Eğer dizi olarak tanımlandıysa bu sınıf, dizideki index numarasını tanımlayın.
+    /// </summary>
+    public int column; 
+    /// <summary>
+    /// hexagon listesine tanımlanmış obje'lerin aktif olurken bulunacağı konumu belirler.
+    /// </summary>
     public Vector2 startPosition;
-    public List<HexagonStatus> hexagonStatuses;
+    /// <summary>
+    /// Row olarak atanmasını istediğiniz hexagon obje'lerini ekler.
+    /// </summary>
+    public List<Hexagon> hexagonStatuses;
+    /// <summary>
+    /// Pooling işlemini yapması ve kolay ulaşılması için eklendi.
+    /// </summary>
     public PoolManager poolManager;
 
-
+    /// <summary>
+    /// Liste'de belirtilen obje'nin renk key'ini gösterir.
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
     public int GetColorKey(int index)
     {
-        return hexagonStatuses[index].hexagonColor.GetKey();
+        return hexagonStatuses[index].GetColor().GetKey();
     }
     public CreativePoint(int _column, int _row, float positionX,PoolManager _poolManager)
     {
-        //Her Create noktasının bir başlangıç konumu vardır.
+        //Her Create noktasının bir başlangıç konumu vardır.(kamera'da görünmemesi için orthographicSize kullanıldı.)
         startPosition = new Vector2(positionX, (Camera.main.orthographicSize + 1) * 2);
         poolManager=_poolManager;
-        hexagonStatuses = new List<HexagonStatus>();
+        hexagonStatuses = new List<Hexagon>();
         column = _column;
         maxRow = _row;
     }
@@ -30,27 +50,24 @@ public class CreativePoint
     /// CreatePoint'e obje ekle işlemini yapar.
     /// </summary>
     /// <param name="hexagonStatus"></param>
-    public void AddMember(HexagonStatus hexagonStatus)
+    public void AddMember(Hexagon hexagonStatus)
     {
         hexagonStatus.SetRow(hexagonStatuses.Count).SetColumn(column);
         hexagonStatuses.Add(hexagonStatus);
-        
     }
      
     /// <summary>
-    /// Patlamadan sonra yeni yerleşim yeri belirlenir.
+    /// Patlamadan sonra yeni yerleşim yeri belirlenir ve Oluşturulacak objeyi belirler.
     /// </summary>
-    public void CheckPositions()
+    public void CheckPositionsAfterExplosion()
     {//eğer maxRow'a eşitse createPoint'in dolu olduğunu anlayıp işlem yaptırmıyoruz.
         if (hexagonStatuses.Count == maxRow)
             return;
         //maxRow eksik çıkınca maxRow'a ulaşıncaya kadar havuz'dan bir obje istedik.
-        //AddMember(poolManager.PullFromPool(PoolNames.hexagon, startPosition)
-        //       .GetComponent<HexagonStatus>());
         while (hexagonStatuses.Count != maxRow)
         {
             AddMember(poolManager.PullFromPool(PoolNames.hexagon, startPosition)
-                .GetComponent<HexagonStatus>());
+                .GetComponent<Hexagon>());
         }
         SetAllInformation().MoveAll();
     }
@@ -76,10 +93,9 @@ public class CreativePoint
             }
 
         }
-       
     }
     /// <summary>
-    /// Tüm objelerine gerekli row ve column değerlerini verir.
+    /// Tüm objelerine gerekli row ve column değerlerini verir ve bulunması gereken noktayı belirler.
     /// </summary>
     /// <returns></returns>
     public CreativePoint SetAllInformation() 
@@ -91,7 +107,7 @@ public class CreativePoint
         return this;
     }
     /// <summary>
-    /// Tüm objelerini hareket ettirir.
+    /// Tüm objeleri hareket ettirir.
     /// </summary>
     /// <returns></returns>
     public CreativePoint MoveAll()
@@ -103,7 +119,10 @@ public class CreativePoint
         }
         return this;
     }
-
+    /// <summary>
+    /// Tüm nesneler yuvalarına yerleştiğinde true değerini döndürür.
+    /// </summary>
+    /// <returns></returns>
     public bool IsArrivedAllMembers()
     { arriveCounter = 0;
        
@@ -115,8 +134,4 @@ public class CreativePoint
         return arriveCounter == maxRow;
     }
 
-    public void SetColumnAndRowMember(int index)
-    {
-        hexagonStatuses[index].SetColumn(column).SetRow(index).SetNestPosition();
-    }
 }

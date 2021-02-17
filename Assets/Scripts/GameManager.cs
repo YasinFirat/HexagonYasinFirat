@@ -6,7 +6,13 @@ using UnityEngine;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
+    /// <summary>
+    /// Sadece okuyabilirsiniz.Çünkü normal bir hexagon'un bir birim row mesafesi olarak hesaplandı.
+    /// </summary>
     public readonly float DISTANCEOFROW = 0.86f;
+    /// <summary>
+    /// Sadece okuyabilirsiniz.Çünkü normal bir hexagon'un bir birim column mesafesi olarak hesaplandı.
+    /// </summary>
     public readonly float DISTANCEOFCOLUMN = 0.75f;
     [Header("Hexagon Oyun Ayarları")]
     [Tooltip("Sütun değerleri giriniz.")]
@@ -79,16 +85,15 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void StartGame()
     {
-        //key eklendi.karşılaştırma Getkey() ile yapılacak.
+        //key eklendi.Renk karşılaştırmaları Getkey() ile yapılacak.
         for (int i = 0; i < hexagonColors.Count; i++)
         {
             hexagonColors[i].SetKey(i);
         }
-        StartCoroutine(StartThisGame());
-       
         explodeHexagon = new ExplodeHexagon(this);
         turnArround = new TurnArround();
-      
+        //Oyun başlatılır.
+        StartCoroutine(StartThisGame());
     }
 
     #region ColumnAndRow
@@ -100,10 +105,18 @@ public class GameManager : MonoBehaviour
     {
         return column;
     }
+    /// <summary>
+    /// Row'lar arasındaki boşlukları yani mesafeyi döndürür.
+    /// </summary>
+    /// <returns></returns>
     public float GetDistanceOfRow()
     {
         return distanceOfHexagon + DISTANCEOFROW;
     }
+    /// <summary>
+    /// Column'lar arasındaki boşlukları yani mesafeyi döndürür.
+    /// </summary>
+    /// <returns></returns>
     public float GetDistanceOfColumn()
     {
         return distanceOfHexagon + DISTANCEOFCOLUMN;
@@ -138,11 +151,6 @@ public class GameManager : MonoBehaviour
     #endregion
 
     /// <summary>
-    /// Patlatılacak noktaların listesi verilmeli
-    /// </summary>
-    /// <param name="explodes"></param>
-
-    /// <summary>
     /// Patlama'dan sonra kullanılması önerilir. Patlayan obje'lerin yerine yeni objeleri yerleştirerek hareket ettirir.
     /// </summary>
     public void CheckAllPoints()
@@ -153,17 +161,10 @@ public class GameManager : MonoBehaviour
         }
         for (int i = 0; i < creativePoint.Count; i++)
         {
-            creativePoint[i].CheckPositions();
+            creativePoint[i].CheckPositionsAfterExplosion();
         }
     }
-    public HexagonColor GetRandomColor
-    {
-        get
-        {
-            return hexagonColors[Random.Range(0, hexagonColors.Count)];
-        }
-       
-    }
+    
     /// <summary>
     /// Oyun başında objelerin düşme animasyonu için sıralamayı belirler.
     /// </summary>

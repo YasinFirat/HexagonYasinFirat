@@ -24,7 +24,7 @@ public class CreateHexagon : Master
             for (int j = 0; j < row; j++)
             {
                 gameManager.creativePoint[i].AddMember(poolManager.PullFromPool(hexagon,Vector3.zero,false)
-                    .GetComponent<HexagonStatus>());
+                    .GetComponent<Hexagon>());
             }
         }
 
