@@ -50,9 +50,6 @@ public class Touch : Master
 
     IEnumerator CheckTurnAvaible()
     {
-#if UNITY_EDITOR
-        Debug.Log("dedector sınıfındna isReadyForTurn kontrol edilir. isREadyForTurn : "+ gameManager.dedector.isReadyForTurn);
-#endif
         while (!gameManager.ReadyTurn)
         {
             yield return new WaitForFixedUpdate();
@@ -60,14 +57,15 @@ public class Touch : Master
         
         for (int i = 0; i < 3&& gameManager.ReadyTurn; i++)
         {
-           
-           gameManager.turnArround.TurnReverseClockWise();
+            gameManager.turnArround.TurnReverseClockWise();
            yield return new WaitForSeconds(1);
            
         }
-#if UNITY_EDITOR
-        Debug.Log("Dönme işlemi durduruldu veya tamamlandı ve dedector isReadtTurn "+ gameManager.dedector.isReadyForTurn + " edildi.");
-#endif
+        if (!gameManager.ReadyTurn)
+        {//döngüden patlama olduğundan çıkmıştır.
+            gameManager.score.SetTextMoves();
+            
+        }
         gameManager.ReadyTouch = false;
         gameManager.ReadyTurn = false;
     }

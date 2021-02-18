@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 /// <summary>
 /// Oyundaki genel ayarlar buradan yapılacak ve çoğu sınıf singleton benzeri bir yapı ile bağlanacak.
 /// </summary>
@@ -24,6 +25,8 @@ public class GameManager : MonoBehaviour
     [HideInInspector]public List<CreativePoint> creativePoint;
     [Header("BombSettings")]
     public int amountAttack = 5;
+    [Header("Score")]
+    public Score score;
     [Header("Colors")]
     public List<HexagonColor> hexagonColors;
     public ExplodeHexagon explodeHexagon;
@@ -31,6 +34,7 @@ public class GameManager : MonoBehaviour
     [Tooltip("Dedector script'ine sahip obje'ji sürükle")]
     public Dedector dedector;
     [HideInInspector] public TurnArround turnArround;
+    
 
 
     #region Explodes
@@ -77,6 +81,8 @@ public class GameManager : MonoBehaviour
             return;
         }
         Debug.Log("Patlatılacak Sayısı: " + explodeHexagon.CheckExplode().Count);
+        score.AddScore(explodeHexagon.CheckExplode().Count);
+        
         List<Vector2Int> explodes = explodeHexagon.CheckExplode();
         if (explodes.Count == 0)
         {
@@ -111,6 +117,7 @@ public class GameManager : MonoBehaviour
         }
         explodeHexagon = new ExplodeHexagon(this);
         turnArround = new TurnArround();
+       
         //Oyun başlatılır.
         StartCoroutine(StartThisGame());
     }
