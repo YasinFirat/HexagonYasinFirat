@@ -7,10 +7,9 @@ public class Touch : Master
     public Transform circle;
     public CircleObject circleObject;
     Vector2 point;
-
+    public bool whenTouchExplode=false;
     void Start()
     {
-        //circleObject = circle.gameObject.GetComponent<CircleObject>();
         gameManager.StartGame();
     }
 
@@ -28,9 +27,9 @@ public class Touch : Master
     {
 
 #if UNITY_EDITOR
-        Debug.Log("0) Dokunma işkemi yapıldı ve GetReadyTouch " + gameManager.GetReadyTouch());
+        Debug.Log("0) Dokunma işkemi yapıldı ve GetReadyTouch " + gameManager.ReadyTouch);
 #endif
-        if (gameManager.GetReadyTouch())
+        if (gameManager.ReadyTouch)
         {
             BeginTouch();
 
@@ -40,25 +39,11 @@ public class Touch : Master
 
     public void BeginTouch()
     {
-
-#if UNITY_EDITOR
-        Debug.Log("1) Begin Touch işlemleri yapılıyor.Çember Pasif edildi.");
-#endif
         circle.gameObject.SetActive(false);
         circleObject.SetVisibleSprite(false);
         circleObject.SetColliderReader(false);
-
-#if UNITY_EDITOR
-        Debug.Log("dokunulan point bölgesi belirlendi");
-#endif
         point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-#if UNITY_EDITOR
-        Debug.Log("Çember Point bölgesine gelir.");
-#endif
         circle.localPosition = point;
-#if UNITY_EDITOR
-        Debug.Log("Çember Aktif edilir.");
-#endif
         circleObject.SetColliderReader(true);
         circle.gameObject.SetActive(true);
     }
@@ -68,22 +53,22 @@ public class Touch : Master
 #if UNITY_EDITOR
         Debug.Log("dedector sınıfındna isReadyForTurn kontrol edilir. isREadyForTurn : "+ gameManager.dedector.isReadyForTurn);
 #endif
-        while (!gameManager.dedector.isReadyForTurn)
+        while (!gameManager.ReadyTurn)
         {
             yield return new WaitForFixedUpdate();
         }
-#if UNITY_EDITOR
-        Debug.Log("dedector sınıfından isReadyForTurn " + gameManager.dedector.isReadyForTurn + "\n 3 defa dönme fonksiyonu çalışır.");
-#endif
-        for (int i = 0; i < 3&&gameManager.GetReadyTouch(); i++)
+        
+        for (int i = 0; i < 3&& gameManager.ReadyTurn; i++)
         {
-            gameManager.turnArround.TurnClockWise();
+           
+           gameManager.turnArround.TurnReverseClockWise();
            yield return new WaitForSeconds(1);
+           
         }
 #if UNITY_EDITOR
         Debug.Log("Dönme işlemi durduruldu veya tamamlandı ve dedector isReadtTurn "+ gameManager.dedector.isReadyForTurn + " edildi.");
 #endif
-        gameManager.SetReadyTouch(false);
-        gameManager.dedector.isReadyForTurn = false;
+        gameManager.ReadyTouch = false;
+        gameManager.ReadyTurn = false;
     }
 }

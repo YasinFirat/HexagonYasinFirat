@@ -13,30 +13,14 @@ public class Dedector : MonoBehaviour
 
     public void OnEnable()
     {
-#if UNITY_EDITOR
-        Debug.Log("<color=red> DEDECTOR AKTİF OLDU</color>");
-#endif
-#if UNITY_EDITOR
-        Debug.Log("selectedObject listesi tekrardan oluşturulacak. Şimdilik boyutu : " + selectedObject.Count);
-#endif
-
         selectedObject = new List<Vector2Int>();
-#if UNITY_EDITOR
-        Debug.Log("selectedObject listesi tekrardan oluşturuldu... Boyutu : " + selectedObject.Count);
-#endif
         StartCoroutine(SelectHexagon(.3f));
     }
     public IEnumerator SelectHexagon(float delay)
     {
-#if UNITY_EDITOR
-        Debug.Log("SelectHexagon metodu çağrıldı ve seçili hexagonların tespiti için");
-#endif
         yield return new WaitForSeconds(delay);
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, range, layerMask);
-#if UNITY_EDITOR
-        Debug.Log(colliders.Length+" sayısı defa hexagon bulundu aynı hexagonları yok etmek için döngüye giriyoruz.");
-#endif
-       
+        
         Vector2Int keep;
         for (int i = 0; i < colliders.Length; i++)
         {

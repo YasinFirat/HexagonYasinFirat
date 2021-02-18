@@ -10,7 +10,13 @@ using UnityEngine;
 public class ExplodeHexagon
 {
     public GameManager gameManager;
+    /// <summary>
+    /// Patlamak için hazır olan hexagon'ların column ve row değerlerini tutar.
+    /// </summary>
     public List<Vector2Int> restore;
+    /// <summary>
+    /// Patlama arayışı içinde olduğunun bilgisini verir.
+    /// </summary>
     public bool isContinueExplode=true;
     bool[] checks;
 

@@ -5,11 +5,17 @@ using UnityEngine;
 
 public class TurnArround : Master
 {
+    public void TurnReverseClockWise()
+    {
+        List<Vector2Int> hexagonStatuses = gameManager.dedector.selectedObject;
+
+        ReadyForTurn(SortToBigArray(hexagonStatuses),true);
+    }
     public void TurnClockWise()
     {
         List<Vector2Int> hexagonStatuses = gameManager.dedector.selectedObject;
 
-        ReadyForTurnLeft(SortToBigArray(hexagonStatuses));
+        ReadyForTurn(SortToBigArray(hexagonStatuses), false);
     }
 
     /// <summary>
@@ -45,8 +51,9 @@ public class TurnArround : Master
     /// Sol tarafa doğru işlem yapar.
     /// </summary>
     /// <param name="hexagonStatuses"></param>
-    public void ReadyForTurnLeft(List<Vector2Int> hexagonStatuses)
+    public void ReadyForTurn(List<Vector2Int> hexagonStatuses,bool isTurnLeft)
     {
+      
         //liste normalde döndürme işlemi yapılacakları VectorInt olarak tuttuğundan dolayı
         //bunlara karşılık gelen bir hex listesi oluşturuyoruz.
         List<Hexagon> hex = new List<Hexagon>();
@@ -62,7 +69,7 @@ public class TurnArround : Master
          *Eğer küçük ve orta aynı ondalık değeri taşıyorsa ; küçük <= orta <= büyük <=küçük
          *şeklinde işeleme alınır
          */
-        if (hexagonStatuses[0].x != hexagonStatuses[1].x)
+        if (hexagonStatuses[0].x != hexagonStatuses[1].x&& isTurnLeft)
         {
             for (int i = 0; i < hexagonStatuses.Count; i++)
             {
@@ -95,8 +102,8 @@ public class TurnArround : Master
         {
             gameManager.creativePoint[hexagonStatuses[i].x].SetAllInformation().MoveAll();
         }
-        //patlamaya yapılabiir bilgisini gerekli yere ulaştırıyoruz.
-        gameManager.explodeHexagon.isContinueExplode = true;
+        //patlama arayışındayım bilgisini veriyor.
+        gameManager.ContinueExplode();
 
     }
 

@@ -15,13 +15,16 @@ public class Pooling
     public Transform parent;
     public int totalMember;
     Queue<GameObject> pool = new Queue<GameObject>();
+    [Tooltip("Column ve Row sayıları çarğımı kadar oluşuturulsun mu ?")]
+    public bool calculateWithColumnAndRow;
 
     /// <summary>
     /// Objects are filled into the Pool and the PoolMember script is added to become a member of the Pool.
     /// </summary>    
     public void FillPool(int row,int column)
     {
-        totalMember = row * column;
+        if(calculateWithColumnAndRow)
+            totalMember = row * column;
         for (int i = 0; i < totalMember; i++)
         {
             GameObject newObject = Object.Instantiate(prefab, parent);

@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
     [Tooltip("Hexagon'lar arası mesafe.")]
     public float distanceOfHexagon = .1f;
     [HideInInspector]public List<CreativePoint> creativePoint;
+    [Header("BombSettings")]
+    public int amountAttack = 5;
     [Header("Colors")]
     public List<HexagonColor> hexagonColors;
     public ExplodeHexagon explodeHexagon;
@@ -32,35 +34,44 @@ public class GameManager : MonoBehaviour
 
 
     #region Explodes
+    /// <summary>
+    /// Aktif olan tüm hexagon'ların bilgilerine ulaşır ve hepsi yerlerine yerleştiyse true değerini döndürür.
+    /// Bu sayede patlama yapıp yapamayacağınıza karar verebilirsiniz.
+    /// </summary>
+    /// <returns></returns>
     public bool GetReadyExplode()
-    {
+    {//true ise  hexagonlar yerine yerleşti. Patlama denetimi yapılabilir.
+        //false ise halen yerine yerleşmeyen var.
         int counter = 0;
         for (int i = 0; i < creativePoint.Count; i++)
         {
             counter += creativePoint[i].IsArrivedAllMembers()?1:0;
         }
-
         return counter == creativePoint.Count;
        
     }
-    public bool GetReadyTouch()
-    {
-        return !explodeHexagon.isContinueExplode;
-    }
-    public void SetReadyTouch(bool ready)
-    {
-        explodeHexagon.isContinueExplode = ready;
-    }
+   
+    /// <summary>
+    /// Dokunma olup olmadığını belirtir.
+    /// </summary>
+    public bool ReadyTouch { get { return !explodeHexagon.isContinueExplode; } set { explodeHexagon.isContinueExplode = !value; } }
+    /// <summary>
+    ///  Dönme'nin devam edip edemeyeceğini veya dönme olayı gerçekleşiyor mu gibi durumlar için kullanılır.
+    /// </summary>
+    public bool ReadyTurn { get { return dedector.isReadyForTurn; } set { dedector.isReadyForTurn = value; } }
+
+    
     /// <summary>
     /// Patlama denetimi yapmak için çağrılır.
     /// </summary>
-    public void ControlExplode()
+
+    public void ContinueExplode()
     {
         explodeHexagon.isContinueExplode = true;
     }
     public void Explode()
     {
-        if (!explodeHexagon.isContinueExplode)
+        if (ReadyTouch)
         {
             CheckAllPoints();
             return;
@@ -69,8 +80,16 @@ public class GameManager : MonoBehaviour
         List<Vector2Int> explodes = explodeHexagon.CheckExplode();
         if (explodes.Count == 0)
         {
-            explodeHexagon.isContinueExplode = false;
+           
+            ReadyTouch = true;
+            return;
         }
+        else
+        {
+            ReadyTouch = false;
+            ReadyTurn = false;
+        }
+       
         for (int i = 0; i < explodes.Count; i++)
         {
             creativePoint[explodes[i].x].RemoveMember(explodes[i].y);
