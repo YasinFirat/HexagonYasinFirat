@@ -61,7 +61,7 @@ public class TurnArround : Master
         for (int i = 0; i < hexagonStatuses.Count; i++)
         {
             hex.Add(
-                gameManager.creativePoint[hexagonStatuses[i].x].hexagonStatuses[hexagonStatuses[i].y]
+                gameManager.creativePoint[hexagonStatuses[i].x].hexagonList[hexagonStatuses[i].y]
                 );
         }
         /*Algoritma 2 türlü işliyor. 
@@ -75,11 +75,11 @@ public class TurnArround : Master
             {
                 if (i == hexagonStatuses.Count - 1)
                 {
-                    gameManager.creativePoint[hexagonStatuses[0].x].hexagonStatuses[hexagonStatuses[0].y] =
+                    gameManager.creativePoint[hexagonStatuses[0].x].hexagonList[hexagonStatuses[0].y] =
                       hex[i];
                     continue;
                 }
-                gameManager.creativePoint[hexagonStatuses[i + 1].x].hexagonStatuses[hexagonStatuses[i + 1].y] =
+                gameManager.creativePoint[hexagonStatuses[i + 1].x].hexagonList[hexagonStatuses[i + 1].y] =
                     hex[i];
             }
         }
@@ -89,11 +89,11 @@ public class TurnArround : Master
             {
                 if (i == hexagonStatuses.Count - 1)
                 {
-                    gameManager.creativePoint[hexagonStatuses[i].x].hexagonStatuses[hexagonStatuses[i].y] =
+                    gameManager.creativePoint[hexagonStatuses[i].x].hexagonList[hexagonStatuses[i].y] =
                       hex[0];
                     continue;
                 }
-                gameManager.creativePoint[hexagonStatuses[i].x].hexagonStatuses[hexagonStatuses[i].y] =
+                gameManager.creativePoint[hexagonStatuses[i].x].hexagonList[hexagonStatuses[i].y] =
                     hex[i + 1];
             }
         }

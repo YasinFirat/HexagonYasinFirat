@@ -17,4 +17,5 @@ public interface IMove
     /// Hareket hızı belirtilebilir veya okunabilir.
     /// </summary>
     public float Speed { get; set; }
+
 }

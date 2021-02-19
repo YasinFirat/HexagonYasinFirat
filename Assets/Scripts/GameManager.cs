@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 /// <summary>
 /// Oyundaki genel ayarlar buradan yapılacak ve çoğu sınıf singleton benzeri bir yapı ile bağlanacak.
 /// </summary>
@@ -15,7 +14,7 @@ public class GameManager : MonoBehaviour
     /// Sadece okuyabilirsiniz.Çünkü normal bir hexagon'un bir birim column mesafesi olarak hesaplandı.
     /// </summary>
     public readonly float DISTANCEOFCOLUMN = 0.75f;
-    [Header("Hexagon Oyun Ayarları")]
+    [Header("Hexagons Settings")]
     [Tooltip("Sütun değerleri giriniz.")]
     public int row;
     [Tooltip("Satır değerleri giriniz.")]
@@ -23,18 +22,21 @@ public class GameManager : MonoBehaviour
     [Tooltip("Hexagon'lar arası mesafe.")]
     public float distanceOfHexagon = .1f;
     [HideInInspector]public List<CreativePoint> creativePoint;
-    [Header("BombSettings")]
+    [Header("Bomb Settings")]
+    public BombCounter bombCounter;
     public int amountAttack = 5;
-    [Header("Score")]
+    [Header("Score Settings")]
     public Score score;
     [Header("Colors")]
     public List<HexagonColor> hexagonColors;
     public ExplodeHexagon explodeHexagon;
-    //Others
+    [Header("Others")]
     [Tooltip("Dedector script'ine sahip obje'ji sürükle")]
     public Dedector dedector;
     [HideInInspector] public TurnArround turnArround;
-    
+    [HideInInspector]public Hexagon bomb;
+    public GameObject endGamePanel;
+    public bool isEndGame;
 
 
     #region Explodes
@@ -63,8 +65,14 @@ public class GameManager : MonoBehaviour
     ///  Dönme'nin devam edip edemeyeceğini veya dönme olayı gerçekleşiyor mu gibi durumlar için kullanılır.
     /// </summary>
     public bool ReadyTurn { get { return dedector.isReadyForTurn; } set { dedector.isReadyForTurn = value; } }
-
-    
+    /// <summary>
+    /// Döndürme işlemi yapılır yapılmaz ilk patlamada gerçekleşecek işlemler.
+    /// </summary>
+    public void BeginExplodeWhenTouchScreen()
+    {
+        score.SetTextMoves();
+        bomb.DoThisWhenMovesAttack();
+    }
     /// <summary>
     /// Patlama denetimi yapmak için çağrılır.
     /// </summary>
@@ -73,6 +81,9 @@ public class GameManager : MonoBehaviour
     {
         explodeHexagon.isContinueExplode = true;
     }
+    /// <summary>
+    /// Patlama işlemleri gerçekleşir.
+    /// </summary>
     public void Explode()
     {
         if (ReadyTouch)
@@ -80,7 +91,6 @@ public class GameManager : MonoBehaviour
             CheckAllPoints();
             return;
         }
-        Debug.Log("Patlatılacak Sayısı: " + explodeHexagon.CheckExplode().Count);
         score.AddScore(explodeHexagon.CheckExplode().Count);
         
         List<Vector2Int> explodes = explodeHexagon.CheckExplode();
@@ -118,8 +128,22 @@ public class GameManager : MonoBehaviour
         explodeHexagon = new ExplodeHexagon(this);
         turnArround = new TurnArround();
        
+       
         //Oyun başlatılır.
         StartCoroutine(StartThisGame());
+    }
+    /// <summary>
+    /// Oyun Bittiğinde çalışır.
+    /// </summary>
+    public void EndGame()
+    {
+        isEndGame = true;
+        for (int i = 0; i < creativePoint.Count; i++)
+        {
+            creativePoint[i].RemoveAllMember();
+        }
+        endGamePanel.SetActive(true);
+        Debug.Log("Oyun Bittiğinde yapılacaklar. ");
     }
 
     #region ColumnAndRow
@@ -187,7 +211,7 @@ public class GameManager : MonoBehaviour
         }
         for (int i = 0; i < creativePoint.Count; i++)
         {
-            creativePoint[i].CheckPositionsAfterExplosion();
+            creativePoint[i].CheckPositionsAfterExplosion(this);
         }
     }
     
@@ -204,7 +228,7 @@ public class GameManager : MonoBehaviour
         {
             while (i<column)
             {
-                creativePoint[i].hexagonStatuses[j].gameObject.SetActive(true);
+                creativePoint[i].hexagonList[j].gameObject.SetActive(true);
                 i++;
                 yield return new WaitForFixedUpdate();
             }

@@ -19,4 +19,5 @@ public interface IColor
     /// </summary>
     /// <returns></returns>
     public HexagonColor GetRandomColor();
+    
 }

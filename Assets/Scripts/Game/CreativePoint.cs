@@ -22,7 +22,7 @@ public class CreativePoint
     /// <summary>
     /// Row olarak atanmasını istediğiniz hexagon obje'lerini ekler.
     /// </summary>
-    public List<Hexagon> hexagonStatuses;
+    public List<Hexagon> hexagonList;
     /// <summary>
     /// Pooling işlemini yapması ve kolay ulaşılması için eklendi.
     /// </summary>
@@ -35,14 +35,14 @@ public class CreativePoint
     /// <returns></returns>
     public int GetColorKey(int index)
     {
-        return hexagonStatuses[index].GetColor().GetKey();
+        return hexagonList[index].GetColor().GetKey();
     }
     public CreativePoint(int _column, int _row, float positionX,PoolManager _poolManager)
     {
         //Her Create noktasının bir başlangıç konumu vardır.(kamera'da görünmemesi için orthographicSize kullanıldı.)
         startPosition = new Vector2(positionX, (Camera.main.orthographicSize + 1) * 2);
         poolManager=_poolManager;
-        hexagonStatuses = new List<Hexagon>();
+        hexagonList = new List<Hexagon>();
         column = _column;
         maxRow = _row;
     }
@@ -52,20 +52,30 @@ public class CreativePoint
     /// <param name="hexagonStatus"></param>
     public void AddMember(Hexagon hexagonStatus)
     {
-        hexagonStatus.SetRow(hexagonStatuses.Count).SetColumn(column);
-        hexagonStatuses.Add(hexagonStatus);
+        hexagonStatus.SetRow(hexagonList.Count).SetColumn(column);
+        hexagonList.Add(hexagonStatus);
     }
      
     /// <summary>
     /// Patlamadan sonra yeni yerleşim yeri belirlenir ve Oluşturulacak objeyi belirler.
     /// </summary>
-    public void CheckPositionsAfterExplosion()
+    public void CheckPositionsAfterExplosion(GameManager gameManager)
     {//eğer maxRow'a eşitse createPoint'in dolu olduğunu anlayıp işlem yaptırmıyoruz.
-        if (hexagonStatuses.Count == maxRow)
+        if (hexagonList.Count == maxRow||gameManager.isEndGame)
             return;
         //maxRow eksik çıkınca maxRow'a ulaşıncaya kadar havuz'dan bir obje istedik.
-        while (hexagonStatuses.Count != maxRow)
+        while (hexagonList.Count != maxRow)
         {
+            if (gameManager.bombCounter.CanCreateBomb(gameManager.score.GetScore()))
+            {
+                if (gameManager.bomb != null)
+                    continue;
+                
+                gameManager.bomb = poolManager.PullFromPool(PoolNames.bomb, startPosition)
+                .GetComponent<Hexagon>();
+                AddMember(gameManager.bomb);
+                continue;
+            }
             AddMember(poolManager.PullFromPool(PoolNames.hexagon, startPosition)
                 .GetComponent<Hexagon>());
         }
@@ -77,18 +87,29 @@ public class CreativePoint
     /// <param name="i"></param>
     public void RemoveMember(int i)
     {
-        hexagonStatuses[i].GetComponent<PoolMember>().GoBackToPool();
+        hexagonList[i].GetComponent<PoolMember>().GoBackToPool();
+    }
+    /// <summary>
+    /// Oyun bittiğinde tüm objeleri yok eder.
+    /// </summary>
+    public void RemoveAllMember()
+    {
+        for (int i = 0; i < hexagonList.Count; i++)
+        {
+            hexagonList[i].GetComponent<PoolMember>().GoBackToPool();
+        }
+
     }
     /// <summary>
     /// Eğer hücre'deki obje active değilse remove edilir.
     /// </summary>
     public void ActiveControl()
     {
-        for (int i = 0; i < hexagonStatuses.Count; i++)
+        for (int i = 0; i < hexagonList.Count; i++)
         {
-            if (!hexagonStatuses[i].gameObject.activeInHierarchy)
+            if (!hexagonList[i].gameObject.activeInHierarchy)
             {
-                hexagonStatuses.RemoveAt(i);
+                hexagonList.RemoveAt(i);
                 i--;
             }
 
@@ -100,9 +121,9 @@ public class CreativePoint
     /// <returns></returns>
     public CreativePoint SetAllInformation() 
     {
-        for (int i = 0; i < hexagonStatuses.Count; i++)
+        for (int i = 0; i < hexagonList.Count; i++)
         {
-            hexagonStatuses[i].SetRow(i).SetColumn(column).SetNestPosition();
+            hexagonList[i].SetRow(i).SetColumn(column).SetNestPosition();
         }
         return this;
     }
@@ -112,10 +133,10 @@ public class CreativePoint
     /// <returns></returns>
     public CreativePoint MoveAll()
     {
-        for (int row = 0; row < hexagonStatuses.Count; row++)
+        for (int row = 0; row < hexagonList.Count; row++)
         {
-            hexagonStatuses[row].SetNestPosition();
-            hexagonStatuses[row].Start_Move();
+            hexagonList[row].SetNestPosition();
+            hexagonList[row].Start_Move();
         }
         return this;
     }
@@ -126,9 +147,9 @@ public class CreativePoint
     public bool IsArrivedAllMembers()
     { arriveCounter = 0;
        
-        for (int i = 0; i < hexagonStatuses.Count; i++)
+        for (int i = 0; i < hexagonList.Count; i++)
         {
-            arriveCounter += hexagonStatuses[i].isArrived ? 1:0;
+            arriveCounter += hexagonList[i].isArrived ? 1:0;
         }
 
         return arriveCounter == maxRow;

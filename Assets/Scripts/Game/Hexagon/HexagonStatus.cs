@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HexagonStatus : Hexagon
@@ -13,5 +11,10 @@ public class HexagonStatus : Hexagon
     {
         gameObject.SetActive(false);
         return this;
+    }
+
+    public override void DoThisWhenMovesAttack()
+    {
+        Debug.Log("Birşey Yapma");
     }
 }

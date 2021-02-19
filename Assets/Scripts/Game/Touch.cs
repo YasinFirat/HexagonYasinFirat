@@ -25,10 +25,6 @@ public class Touch : Master
 
     private void OnMouseDown()
     {
-
-#if UNITY_EDITOR
-        Debug.Log("0) Dokunma işkemi yapıldı ve GetReadyTouch " + gameManager.ReadyTouch);
-#endif
         if (gameManager.ReadyTouch)
         {
             BeginTouch();
@@ -63,8 +59,10 @@ public class Touch : Master
         }
         if (!gameManager.ReadyTurn)
         {//döngüden patlama olduğundan çıkmıştır.
-            gameManager.score.SetTextMoves();
             
+            gameManager.BeginExplodeWhenTouchScreen();
+
+
         }
         gameManager.ReadyTouch = false;
         gameManager.ReadyTurn = false;

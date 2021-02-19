@@ -37,12 +37,12 @@ public  class Score
 
     public Score SetTextScore(int _CurrentScore)
     {
-        txtScore.text = _CurrentScore.ToString();
+        txtScore.text ="Score : "+ _CurrentScore.ToString();
         return this;
     }
     public Score SetTextHighScore()
     {
-        txtHighScore.text = PlayerPrefs.GetInt("HighScore").ToString();
+        txtHighScore.text ="HighScore : "+ PlayerPrefs.GetInt("HighScore").ToString();
         return this;
     }
     public Score SetTextMoves()

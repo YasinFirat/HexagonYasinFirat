@@ -20,5 +20,5 @@ public interface IBomb
     /// AttackCounter, 0 değerine ulaştığında true döndürür.
     /// </summary>
     /// <returns></returns>
-    bool ControlEndGame();
+    bool CanStillMove();
 }

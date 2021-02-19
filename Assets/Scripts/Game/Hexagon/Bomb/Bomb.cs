@@ -1,17 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using UnityEngine.UI;
 
 public class Bomb : Hexagon, IBomb
 {
     private int remainingAttacks;
+    public Text text;
     public int AttackCounter()
     {
         remainingAttacks--;
+        text.text = remainingAttacks.ToString();
         return remainingAttacks;
     }
-
-    public bool ControlEndGame()
+    public bool CanStillMove()
     {
         return remainingAttacks <= 0;
     }
@@ -22,6 +21,16 @@ public class Bomb : Hexagon, IBomb
         return this;
     }
 
+    public override void DoThisWhenMovesAttack()
+    {
+
+        AttackCounter();
+        if (CanStillMove())
+        {
+            gameManager.EndGame();
+        }
+    }
+
     public int GetAttack()
     {
         return remainingAttacks;
@@ -30,12 +39,15 @@ public class Bomb : Hexagon, IBomb
     public void StartAttackCounterValue(int startAmount)
     {
         remainingAttacks = startAmount;
+        text.text = remainingAttacks.ToString();
     }
 
     private void OnEnable()
     {
+       
         DoThisWhenOnEnabled();
         StartAttackCounterValue(gameManager.amountAttack);
+
     }
 
 }

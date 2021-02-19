@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -15,9 +14,11 @@ public abstract class Hexagon :Master,IColor,ICorners,IMove
     [HideInInspector]public int row;
     [HideInInspector]public int column;
     [HideInInspector]public bool isArrived;
+    [HideInInspector] public bool endGame;
    
     public PointsOfHexagon pointsOfHexagon;
     public SpriteRenderer spriteRenderer;
+    
 
     public float Speed { get { return speed; } set { speed = value; } }
 
@@ -26,6 +27,11 @@ public abstract class Hexagon :Master,IColor,ICorners,IMove
     /// </summary>
     /// <returns></returns>
     public abstract Hexagon DoThisWhenFirstStart();
+    /// <summary>
+    /// Her hamle sonrası başlatılan patlama için bir defa çalıştırılması önerilir.
+    /// </summary>
+    /// <returns></returns>
+    public abstract void DoThisWhenMovesAttack();
     /// <summary>
     /// Obje aktif olduğunda standart olarak yapılması gerekenler.
     /// </summary>
@@ -36,7 +42,12 @@ public abstract class Hexagon :Master,IColor,ICorners,IMove
             firstRun = !firstRun;
             return;
         }
-        
+        if (endGame)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+           
         transform.localPosition = gameManager.creativePoint[column].startPosition;
         SetColor(GetRandomColor());
         SetNestPosition();
@@ -127,6 +138,7 @@ public abstract class Hexagon :Master,IColor,ICorners,IMove
     {
         isArrived = false;
         Speed = 5;
+       
         if (!firstMove)
         {
             yield return new WaitForSeconds((column + row + Random.Range(0, 1f)) / 8);
@@ -139,15 +151,17 @@ public abstract class Hexagon :Master,IColor,ICorners,IMove
                 Vector2.MoveTowards(transform.localPosition, GetNestPosition(), Time.deltaTime * Speed);
             yield return new WaitForFixedUpdate();
         }
-        transform.localPosition = GetNestPosition();
 
+        transform.localPosition = GetNestPosition();
         isArrived = true;
         RefreshAllCorners();
+       
+
     }
     public void Start_Move()
     {
         StartCoroutine(MoveEnumerator());
     }
+    
 
-   
 }
