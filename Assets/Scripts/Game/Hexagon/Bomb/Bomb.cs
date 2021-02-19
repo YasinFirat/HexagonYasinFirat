@@ -23,6 +23,12 @@ public class Bomb : Hexagon, IBomb
 
     public override void DoThisWhenMovesAttack()
     {
+        if (!gameObject.activeInHierarchy)
+        {
+            gameManager.bomb = null;
+            return;
+        }
+            
 
         AttackCounter();
         if (CanStillMove())
