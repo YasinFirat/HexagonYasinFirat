@@ -3,8 +3,8 @@
     "m_SelectedPackage": {
         "deviceId": "52038d31fef06363",
         "name": "com.DefaultCompany.com.unity.template.mobile2D",
-        "processId": 9944,
-        "exited": true
+        "processId": 14204,
+        "exited": false
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
@@ -13,6 +13,54 @@
             "name": "com.DefaultCompany.com.unity.template.mobile2D",
             "processId": 9944,
             "exited": true
+        },
+        {
+            "deviceId": "52038d31fef06363",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 29150,
+            "exited": false
+        },
+        {
+            "deviceId": "52038d31fef06363",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 17142,
+            "exited": false
+        },
+        {
+            "deviceId": "52038d31fef06363",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 28244,
+            "exited": false
+        },
+        {
+            "deviceId": "52038d31fef06363",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 31541,
+            "exited": false
+        },
+        {
+            "deviceId": "52038d31fef06363",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 3763,
+            "exited": false
+        },
+        {
+            "deviceId": "52038d31fef06363",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 7927,
+            "exited": false
+        },
+        {
+            "deviceId": "52038d31fef06363",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 11864,
+            "exited": false
+        },
+        {
+            "deviceId": "52038d31fef06363",
+            "name": "com.DefaultCompany.com.unity.template.mobile2D",
+            "processId": 14204,
+            "exited": false
         }
     ],
     "m_Tags": {

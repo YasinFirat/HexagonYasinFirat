@@ -6,7 +6,7 @@ using UnityEngine;
 /// Burada patlanacak objeleri bulan algoritma geliştirildi.
 /// (Oyun tamamlandıktan sonra optimize edilecek ve OOP'ye uygun hale getirilecek.)
 /// </summary>
-
+[System.Serializable]
 public class ExplodeHexagon
 {
     public GameManager gameManager;

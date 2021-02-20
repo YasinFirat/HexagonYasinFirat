@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Dokunma olup olmadığını belirtir.
     /// </summary>
-    public bool ReadyTouch { get { return !explodeHexagon.isContinueExplode; } set { explodeHexagon.isContinueExplode = !value; } }
+    public bool ReadyTouch { get { return !explodeHexagon.isContinueExplode; } }
     /// <summary>
     ///  Dönme'nin devam edip edemeyeceğini veya dönme olayı gerçekleşiyor mu gibi durumlar için kullanılır.
     /// </summary>
@@ -71,7 +71,8 @@ public class GameManager : MonoBehaviour
     public void BeginExplodeWhenTouchScreen()
     {
         score.SetTextMoves();
-        bomb.DoThisWhenMovesAttack();
+        if(bomb!=null)
+            bomb.DoThisWhenMovesAttack();
     }
     /// <summary>
     /// Patlama denetimi yapmak için çağrılır.
@@ -96,13 +97,10 @@ public class GameManager : MonoBehaviour
         List<Vector2Int> explodes = explodeHexagon.CheckExplode();
         if (explodes.Count == 0)
         {
-           
-            ReadyTouch = true;
             return;
         }
         else
         {
-            ReadyTouch = false;
             ReadyTurn = false;
         }
        

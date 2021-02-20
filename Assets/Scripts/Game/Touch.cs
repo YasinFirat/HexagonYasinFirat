@@ -8,7 +8,10 @@ public class Touch : Master
     public Transform circle;
     public CircleObject circleObject;
     Vector2 point;
-    public bool whenTouchExplode=false;
+    Vector2 positionOfCircle;
+    public bool afterExp=false;
+    public bool isTouchAvaible=true;
+    public bool isMoved = false;
     void Start()
     {
         gameManager.StartGame();
@@ -19,9 +22,17 @@ public class Touch : Master
     {
         if (gameManager.GetReadyExplode())
         {
+           
+            if (afterExp)
+            {
+                Invoke("Circle",1);
+                afterExp = false;
+            }
+            //start yapsın bir saniye sonra circle açılsın. (patlamadan geldiğini bildir)
             gameManager.Explode();
+
         }
-        if (gameManager.ReadyTouch)
+        if (isTouchAvaible)
         {
             TouchAndroid();
         }
@@ -37,14 +48,17 @@ public class Touch : Master
                     TouchStart(Input.GetTouch(0).position);
                     break;
                 case TouchPhase.Moved:
-                    TouchMoved(Input.GetTouch(0).position);
+                 //  TouchMoved(Input.GetTouch(0).position);
                     break;
                 case TouchPhase.Stationary:
+                  
                     break;
                 case TouchPhase.Ended:
+
                     TouchEnd(Input.GetTouch(0).position);
                     break;
                 case TouchPhase.Canceled:
+                    
                     break;
                 default:
                     break;
@@ -55,51 +69,47 @@ public class Touch : Master
 
     private void TouchEnd(Vector2 position)
     {
+        
+        //if (isMoved)
+        //{
+        //    Debug.Log("end2");
+        //    isMoved = false;
+        //    return;
+        //}
+
+
         position = Camera.main.ScreenToWorldPoint(position);
-
-        if (Vector2.Distance(point,position) > .5f)
+        if (Vector2.Distance(point,position) > .05f&&circle.gameObject.activeInHierarchy)
         {
-            Debug.Log("Döndürme işlemi yapılır.");
-            StartCoroutine(CheckTurnAvaible());
-
+            StartCoroutine(CheckTurnAvaible((point.x - position.x) > 0|| (point.y - position.y > 0)));
         }
-        else
+        else if(Vector2.Distance(point, position) < .05f)
         {
-            BeginTouch();
-            Debug.Log("seçim işlemini yap");
+            positionOfCircle = point;
+            Circle();
+        }
+    }
+    private void TouchMoved(Vector2 position)
+    {
+        position = Camera.main.ScreenToWorldPoint(position);
+        Debug.Log(Vector2.Distance(point, position));
+        if (isMoved)
+            return;
+      
+        if (Vector2.Distance(point, position) > .13f && circle.gameObject.activeInHierarchy)
+        {
+            StartCoroutine(CheckTurnAvaible((point.x - position.x) > 0 || (point.y - position.y > 0)));
+            isMoved = true;
         }
     }
 
     private void TouchStart(Vector2 position)
     {
-       point= Camera.main.ScreenToWorldPoint(position);
+        Debug.Log("Dokundu");
+        point= Camera.main.ScreenToWorldPoint(position);
         
     }
-    private void TouchMoved(Vector2 position)
-    {
-        position = Camera.main.ScreenToWorldPoint(position);
-
-        if (Vector2.Distance(point, position) > .5f)
-        {
-            Debug.Log("Döndürme işlemi yapılır.");
-           // StartCoroutine(CheckTurnAvaible());
-
-        }
-    }
-
-    private void OnMouseDown()
-    {
-        if (gameManager.ReadyTouch)
-        {
-           // BeginTouch();
-
-         //   StartCoroutine(CheckTurnAvaible());
-        }
-    }
-    /// <summary>
-    /// Çember yeni konumuna yerleştirilir.
-    /// </summary>
-    public void BeginTouch()
+    public void CloseCircle()
     {
         #region Cemberin birçok ozelligi kapatılır.Yer değiştirmek için hazır olur.
         circle.gameObject.SetActive(false);
@@ -107,30 +117,52 @@ public class Touch : Master
         circleObject.SetColliderReader(false);
         #endregion
 
-       // point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        circle.localPosition = point;
+
+    }
+    public void Circle()
+    {CloseCircle();
+        SetCirclePosition();
+        OpenCircle();
+    }
+    public void OpenCircle()
+    {
         circleObject.SetColliderReader(true);
         circle.gameObject.SetActive(true);
+       
+    }
+    public void SetCirclePosition()
+    {
+        circle.localPosition = positionOfCircle;
     }
 
-    IEnumerator CheckTurnAvaible()
+
+    IEnumerator CheckTurnAvaible(bool _direction)
     {
         while (!gameManager.ReadyTurn)
         {
             yield return new WaitForFixedUpdate();
         }
-        
+        isTouchAvaible = false;
         for (int i = 0; i < 3&& gameManager.ReadyTurn; i++)
         {
-            gameManager.turnArround.TurnReverseClockWise();
+            gameManager.turnArround.StartTurn(_direction);
            yield return new WaitForSeconds(1);
            
         }
         if (!gameManager.ReadyTurn)
         {//döngüden patlama olduğundan çıkmıştır.
             gameManager.BeginExplodeWhenTouchScreen();
+            CloseCircle();
+            afterExp = true;
         }
-        gameManager.ReadyTouch = false;
+        else
+        {
+            Circle();
+        }
         gameManager.ReadyTurn = false;
+       
+        isTouchAvaible = true;
+
+
     }
 }

@@ -10,12 +10,13 @@ public class TurnArround : Master
         List<Vector2Int> hexagonStatuses = gameManager.dedector.selectedObject;
 
         ReadyForTurn(SortToBigArray(hexagonStatuses),true);
+        Debug.Log("Çark Sesi eklenebilir.");
     }
-    public void TurnClockWise()
+    public void StartTurn(bool _direction)
     {
         List<Vector2Int> hexagonStatuses = gameManager.dedector.selectedObject;
 
-        ReadyForTurn(SortToBigArray(hexagonStatuses), false);
+        ReadyForTurn(SortToBigArray(hexagonStatuses), _direction);
     }
 
     /// <summary>
@@ -69,7 +70,7 @@ public class TurnArround : Master
          *Eğer küçük ve orta aynı ondalık değeri taşıyorsa ; küçük <= orta <= büyük <=küçük
          *şeklinde işeleme alınır
          */
-        if (hexagonStatuses[0].x != hexagonStatuses[1].x&& isTurnLeft)
+        if (hexagonStatuses[0].x != hexagonStatuses[1].x&&! isTurnLeft)
         {
             for (int i = 0; i < hexagonStatuses.Count; i++)
             {
